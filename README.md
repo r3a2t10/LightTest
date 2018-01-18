@@ -27,4 +27,4 @@ NTHU meichu FastLED LightTeset
  - - - - - - - - - - - - - - - - - - - - - - - - - - - -  led[num_led/5*5]
  time-> p.s:each| |=delay(delatime)
  ```
- 等待測試舞者奔跑速度與暫留效果
+pov led : 等待測試舞者奔跑速度與暫留效果
