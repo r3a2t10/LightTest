@@ -13,7 +13,7 @@
 CRGB leds[NUM_LEDS];        // Array of leds
 
 #define DISPLAYTIME        5  //display an effect for how long
-#define FRAMES_PER_SECOND  120 //frames per second
+#define FRAMES_PER_SECOND  300 //frames per second
 
 #define COLORSTRINGLEN 51
 File myFile;
@@ -30,11 +30,13 @@ void setup() {
     Serial.println("initialization failed!");
     while (1);
   }
+
+  ClearAll();
 }
 
 // List of patterns to cycle through.  Each is defined as a separate function below.
 typedef void (*SimplePatternList[])();
-SimplePatternList gPatterns = { WhitePurple,
+SimplePatternList gPatterns = { //WhitePurple,
                                 //Jungle,
                                 //MiddleOut,
                                 //Blink,
@@ -43,6 +45,8 @@ SimplePatternList gPatterns = { WhitePurple,
                                 //Confetti,
                                 //Sinelon,
                                 //NTHUpattern, 
+                                //ClearAll,
+                                FillAll,
                                 ChineseWord
                                 };
                                 
@@ -506,6 +510,7 @@ void NTHUpattern(){
 
 void ChineseWord(){
 
+  LEDS.setBrightness(50);
   readSD();
   Serial.println(F("ChineseWord():done!"));
   
@@ -515,12 +520,13 @@ void readSD(){
 
   
   
-  myFile = SD.open("test.txt");
+  myFile = SD.open("output.txt");
   if (myFile) {
     //Serial.println("test.txt:");
-
     // read from the file until there's nothing else in it:
+    int zz=0;
     while (myFile.available()) {
+      
       String colorstring = "";
       colorstring = myFile.readStringUntil('\n');
       Serial.println(colorstring);
@@ -549,18 +555,25 @@ void readSD(){
           fill_solid(leds+NUM_LEDS/colorstring.length()*x,NUM_LEDS/colorstring.length(),tmp);
       }
       FastLED.show();//delay(delaytime);
+      zz++;
+      //if(zz==10){while(1);}
     }
     // close the file:
     myFile.close();
   } 
   else {
     // if the file didn't open, print an error:
-    Serial.println("error opening test.txt");
+    Serial.println("error opening txt");
   }
   
 }
 
 void ClearAll() {
   fill_solid(leds,NUM_LEDS,0);
-  //FastLED.show();
+  FastLED.show();
+}
+void FillAll() {
+  LEDS.setBrightness(50);
+  fill_solid(leds,NUM_LEDS,CRGB::Purple);
+  FastLED.show();
 }
